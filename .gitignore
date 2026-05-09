@@ -25,6 +25,10 @@ dist/
 .env.*
 !.env.example
 
+# Local project notes and deployment docs
+/CLAUDE.md
+/DEPLOYMENT.md
+
 # Editor and OS files
 .idea/
 .vscode/
