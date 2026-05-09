@@ -1,0 +1,35 @@
+# VCS
+.git
+.gitignore
+
+# Python virtualenvs and caches
+.venv
+.uv-cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+
+# Tests are not needed in the runtime image
+tests
+
+# IDE / editor noise
+.idea
+.vscode
+*.swp
+
+# Build artefacts
+dist
+build
+*.egg-info
+
+# Local docs (kept on the host, not in the image)
+ProxyMaze26_Challenge.md
+ProxyMaze26_Challenge.pdf
+DEPLOYMENT.md
+CLAUDE.md
