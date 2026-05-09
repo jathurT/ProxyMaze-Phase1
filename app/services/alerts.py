@@ -41,8 +41,13 @@ async def evaluate(state: AppState) -> None:
 
     async with state.alerts_lock:
         down_ids = sorted(p.id for p in state.pool.values() if p.status == "down")
+        up_count = sum(1 for p in state.pool.values() if p.status == "up")
         total = len(state.pool)
-        rate = (len(down_ids) / total) if total else 0.0
+        # Rate excludes pending proxies (spec example shows total = up + down).
+        # Including pending in the denominator causes false resolves when an
+        # operator adds proxies to an already-breached pool (criterion 4.7).
+        classified = up_count + len(down_ids)
+        rate = (len(down_ids) / classified) if classified > 0 else 0.0
         active_id = state.active_alert_id
 
         # --- Case 1: no active alert + breach -> mint new alert -------------

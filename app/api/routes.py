@@ -109,7 +109,10 @@ async def get_proxies(state: StateDep) -> PoolSummary:
         total = len(proxies)
         up = sum(1 for p in proxies if p.status == "up")
         down = sum(1 for p in proxies if p.status == "down")
-        rate = (down / total) if total else 0.0
+        # Match alerts.evaluate: rate is over classified (up + down) proxies
+        # so transient pending state does not skew the threshold check.
+        classified = up + down
+        rate = (down / classified) if classified > 0 else 0.0
         return PoolSummary(
             total=total,
             up=up,

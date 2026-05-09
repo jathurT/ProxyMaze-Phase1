@@ -45,11 +45,16 @@ async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         state.config_changed.set()
         for task in state.background_tasks:
             task.cancel()
+        for task in list(state.retry_tasks):
+            task.cancel()
         await asyncio.gather(*state.background_tasks, return_exceptions=True)
+        if state.retry_tasks:
+            await asyncio.gather(*state.retry_tasks, return_exceptions=True)
         if state.http_client is not None:
             await state.http_client.aclose()
             state.http_client = None
         state.background_tasks = []
+        state.retry_tasks = set()
         logger.info("ProxyMaze: shutdown complete")
 
 
