@@ -123,6 +123,7 @@ class AppState:
 
         self.http_client: httpx.AsyncClient | None = None
         self.background_tasks: list[asyncio.Task[None]] = []
+        self.retry_tasks: set[asyncio.Task[None]] = set()
         self.shutting_down: bool = False
 
 
